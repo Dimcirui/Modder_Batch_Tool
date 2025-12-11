@@ -83,7 +83,7 @@ class MBTMHWilds(bpy.types.Panel):
     # bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
-    def poll(self, context):
+    def poll(cls, context):
         mbt_toolpanel = context.scene.mbt_toolpanel
         return bool(mbt_toolpanel.show_mhwilds)
 
@@ -268,7 +268,7 @@ class MBTCredits(bpy.types.Panel):
         row = col.row(align=False) ; row.scale_y = 0.75
         row.label(text = "Modified by:")
         row = col.row(align=False) ; row.scale_y = 0.75
-        row.label(text = "Korone")
+        row.label(text = "Korone, Dimcirui")
         col.separator()
         row = col.row(align=False) ; row.scale_y = 0.75
         row.label(text = "Special thanks:")
@@ -284,8 +284,7 @@ class MBTCredits(bpy.types.Panel):
         row = col.row() ; row.scale_y = 1.1
         button = row.operator("mtb.caimogu_website", icon_value=preview_collections["icons"]["caimogu"].icon_id)
 
-# === 移植 MHRise 面板 ===
-@reg_order(10) # 排序号设大一点，排在后面
+@reg_order(5)
 class MBTMHRise(bpy.types.Panel):
     bl_label = "MHRise"
     bl_idname = "OBJECT_PT_MBT_MHRise"
@@ -294,33 +293,35 @@ class MBTMHRise(bpy.types.Panel):
     bl_category = "Modder Batch Tool"
 
     @classmethod
-    def poll(self, context):
-        mbt_toolpanel = context.scene.mbt_toolpanel
-        return bool(mbt_toolpanel.show_mhrise)
+    def poll(cls, context):
+        try:
+            return context.scene.mbt_toolpanel.show_mhrise
+        except:
+            return False
 
     def draw(self, context):
         layout = self.layout
         
         layout.label(text="Import MHRise shadow mesh")
         row = layout.row()
-        # 注意：这里调用的是旧版operator的id，必须确保旧版py文件被正确加载
-        row.operator("tool.importmhrfmesh", icon="OUTLINER_OB_MESH") 
-        row.operator("tool.importmhrmmesh", icon="OUTLINER_OB_MESH")    
+        row.operator("mhr.import_female_mesh", icon="OUTLINER_OB_MESH")
+        row.operator("mhr.import_male_mesh", icon="OUTLINER_OB_MESH")
         
         layout.label(text="Batch Snap Bones")
         row = layout.row()
-        row.operator("tool.snapbonesmmdtomhr", icon="OUTLINER_OB_ARMATURE")
+        row.operator("mhr.snap_bones_mmd", icon="OUTLINER_OB_ARMATURE")
         
         layout.label(text="Rename Vertex Groups")
         row = layout.row()
-        row.operator("tool.mmdtomhrrename", icon="OUTLINER_DATA_MESH")
+        row.operator("mhr.mmd_to_mhr", icon="OUTLINER_DATA_MESH")
+        row.operator("mhr.uma_to_mhr", icon="OUTLINER_DATA_MESH")
+        row.operator("mhr.mhw_to_mhr", icon="OUTLINER_DATA_MESH")
+        
         row = layout.row()
-        row.operator("tool.umatomhrrename", icon="OUTLINER_DATA_MESH")
-        row = layout.row()
-        row.operator("tool.mhwtomhrrename", icon="OUTLINER_DATA_MESH")
+        row.operator("mhr.xps_to_mhr", icon="OUTLINER_DATA_MESH")
 
-# === 移植 MHWorld 面板 ===
-@reg_order(11)
+
+@reg_order(6)
 class MBTMHWorld(bpy.types.Panel):
     bl_label = "MHWorld"
     bl_idname = "OBJECT_PT_MBT_MHWorld"
@@ -329,26 +330,39 @@ class MBTMHWorld(bpy.types.Panel):
     bl_category = "Modder Batch Tool"
 
     @classmethod
-    def poll(self, context):
-        mbt_toolpanel = context.scene.mbt_toolpanel
-        return bool(mbt_toolpanel.show_mhworld)
+    def poll(cls, context):
+        try:
+            return context.scene.mbt_toolpanel.show_mhworld
+        except:
+            return False
 
     def draw(self, context):
         layout = self.layout
-
+        
         layout.label(text="Import MHWorld basic armature")
         row = layout.row()
-        row.operator("tool.importmhworldfmesh", icon="OUTLINER_OB_MESH") 
-        row.operator("tool.importmhworldmmesh", icon="OUTLINER_OB_MESH") 
+        row.operator("mhw.import_female_mesh", icon="OUTLINER_OB_MESH")
+        row.operator("mhw.import_male_mesh", icon="OUTLINER_OB_MESH")
 
         layout.label(text="Batch Snap Bones")
         row = layout.row()
-        row.operator("tool.snapbonesmmdtomhw", icon="OUTLINER_OB_ARMATURE")
+        row.operator("mhw.snap_bones_mmd", icon="OUTLINER_OB_ARMATURE")
 
         layout.label(text="Rename Vertex Groups")
         row = layout.row()
-        row.operator("tool.mmdtomhwrename", icon="OUTLINER_DATA_MESH")
+        row.operator("mhw.mmd_to_mhw", icon="OUTLINER_DATA_MESH")
+        row.operator("mhw.vrchat_to_mhw", icon="OUTLINER_DATA_MESH")
+        row.operator("mhw.uma_to_mhw", icon="OUTLINER_DATA_MESH")
+        
         row = layout.row()
-        row.operator("tool.vrchattomhwrename", icon="OUTLINER_DATA_MESH")
+        row.operator("mhw.mhr_to_mhw", icon="OUTLINER_DATA_MESH")
+        
+        layout.label(text="Utility")
         row = layout.row()
-        row.operator("tool.umatomhwrename", icon="OUTLINER_DATA_MESH")
+        row.operator("mhw.add_empty_mesh", icon="MESH_CUBE")
+        
+        layout.label(text="Auto Process (Check Settings First)")
+        row = layout.row()
+        row.scale_y = 1.5
+        row.operator("mhw.auto_export_process", icon="PLAY")
+        row.operator("mhw.process_settings", text="", icon="PREFERENCES")
