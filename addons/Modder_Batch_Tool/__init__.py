@@ -1,5 +1,6 @@
 import bpy
 import os
+from .legacy_games.MHWorld import auto_process
 from bpy.utils import previews
 from bpy.props import StringProperty, BoolProperty, EnumProperty, CollectionProperty,PointerProperty
 
@@ -73,6 +74,12 @@ def register():
     addon_updater_ops.register(bl_info)
 
     auto_load.register()
+    
+    # 手动注册 MHWorld 的属性
+    try:
+        auto_process.register()
+    except Exception as e:
+        print(f"Warning: MHWorld properties register failed: {e}")
 
     icon_names = ["github", "korone", "bilibili", "qq", "caimogu"]
     pcoll = bpy.utils.previews.new()
@@ -100,6 +107,12 @@ def unregister():
     for pcoll in preview_collections.values():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
+    
+    # 手动注销 MHWorld 的属性（要在 auto_load 之前注销）
+    try:
+        auto_process.unregister()
+    except:
+        pass
 
     auto_load.unregister()
     remove_properties(_addon_properties)

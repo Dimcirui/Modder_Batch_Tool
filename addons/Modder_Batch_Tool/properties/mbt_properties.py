@@ -90,3 +90,17 @@ class MBTToolPanelPG(bpy.types.PropertyGroup):
         items=[("1", "helm", ""), ("2", "body", "")],
         default=0,
     )
+    
+    # === 添加 MHRise 开关 ===
+    show_mhrise: BoolProperty(
+        name="MHRise",
+        description="Show MHRise Panel",
+        default=False
+    )
+
+    # === 添加 MHWorld 开关 ===
+    show_mhworld: BoolProperty(
+        name="MHWorld",
+        description="Show MHWorld Panel",
+        default=False
+    )
