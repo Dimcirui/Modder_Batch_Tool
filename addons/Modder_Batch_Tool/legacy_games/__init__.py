@@ -18,7 +18,7 @@ _submodule_names = {
         "UMAtoMHW",
         "VRCHATtoMHW",
         "addemptymesh",
-        "auto_process",
+        # "auto_process",
     ],
 }
 

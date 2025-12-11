@@ -1,6 +1,7 @@
 import bpy
 import os
 from .legacy_games.MHWorld import auto_process
+from . import legacy_games
 from bpy.utils import previews
 from bpy.props import StringProperty, BoolProperty, EnumProperty, CollectionProperty,PointerProperty
 
@@ -17,13 +18,13 @@ from .panels.AddonPanels import ICONS_PATH, preview_collections
 # Add-on info
 bl_info = {
     "name": "Modder Batch Tool",
-    "author": "诸葛不太亮",
-    "blender": (2, 93, 0),
-    "version": (1, 3, 1),
+    "author": "诸葛不太亮, Dimcirui",
+    "blender": (4, 2, 0),
+    "version": (1, 4, 0),
     "description": "Utility tools to do a lot of repetitive operations automatically.",
     "warning": "",
-    "wiki_url": "https://github.com/chikichikibangbang/Modder_Batch_Tool",
-    "tracker_url": "https://github.com/chikichikibangbang/Modder_Batch_Tool/issues",
+    "wiki_url": "https://github.com/Dimcirui/Modder_Batch_Tool",
+    "tracker_url": "https://github.com/Dimcirui/Modder_Batch_Tool/issues",
     "support": "COMMUNITY",
     # "location": "View3D > Tool Shelf > Modder's Batch Tool",
     "category": "3D View"
@@ -75,11 +76,14 @@ def register():
 
     auto_load.register()
     
-    # 手动注册 MHWorld 的属性
+    # 注册 legacy_games
     try:
         auto_process.register()
+        legacy_games.register()  # 新增这行
     except Exception as e:
-        print(f"Warning: MHWorld properties register failed: {e}")
+        print(f"Warning: legacy_games register failed: {e}")
+        import traceback
+        traceback.print_exc()
 
     icon_names = ["github", "korone", "bilibili", "qq", "caimogu"]
     pcoll = bpy.utils.previews.new()
@@ -108,8 +112,9 @@ def unregister():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
     
-    # 手动注销 MHWorld 的属性（要在 auto_load 之前注销）
+    # 手动注销 legacy_games
     try:
+        legacy_games.unregister()
         auto_process.unregister()
     except:
         pass
