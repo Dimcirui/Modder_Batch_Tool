@@ -15,7 +15,7 @@ Considering creating an instruction document. Most of the functions have been ma
 4. If the installation is successful, you can see it in the sidebar in blender (**shortcut key:N**).
 
 # Quickly start 
-* When you install the addon for the first time, it will display the MHRise panel by default. You can click **"Show Panel Settings"** to decide which panels you need to display.
+* When you install the addon for the first time, it will display the MHWilds panel by default. You can click **"Show Panel Settings"** to decide which panels you need to display.
 * The material-combiner function is used the same as before, **but it does not merge materials, only images**. This means that you can still separate by materials after it.
 
 # Author
@@ -30,7 +30,6 @@ Considering creating an instruction document. Most of the functions have been ma
 
 # 一些中文内容
 B站id：不太亮的诸葛亮
-
 怪猎mod作者交流群：640945651
 
 
