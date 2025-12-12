@@ -1,9 +1,10 @@
+import os
 import bpy
 import pathlib
 
 _mesh_dir = pathlib.Path(__file__).parent / "mesh"
-_f_mesh_file = str(_mesh_dir / "f_mesh.mod3")
-_m_mesh_file = str(_mesh_dir / "m_mesh.mod3")
+# _f_mesh_file = str(_mesh_dir / "f_mesh.mod3")
+# _m_mesh_file = str(_mesh_dir / "m_mesh.mod3")
 
 
 def _check_mod3_importer():
@@ -26,7 +27,7 @@ class MHW_OT_ImportFemaleMesh(bpy.types.Operator):
             self.report({'ERROR'}, "MHW Model Editor not installed!")
             return {'CANCELLED'}
         
-        bpy.ops.mhw_mod3.import_mhw_mod3(filepath=_f_mesh_file)
+        bpy.ops.mhw_mod3.import_mhw_mod3('EXEC_DEFAULT', directory=str(_mesh_dir) + os.sep, files=[{"name": "f_mesh.mod3"}],)
         self.report({'INFO'}, "Import completed")
         return {'FINISHED'}
 
@@ -46,7 +47,7 @@ class MHW_OT_ImportMaleMesh(bpy.types.Operator):
             self.report({'ERROR'}, "MHW Model Editor not installed!")
             return {'CANCELLED'}
         
-        bpy.ops.mhw_mod3.import_mhw_mod3(filepath=_m_mesh_file)
+        bpy.ops.mhw_mod3.import_mhw_mod3('EXEC_DEFAULT', directory=str(_mesh_dir) + os.sep, files=[{"name": "m_mesh.mod3"}],)
         self.report({'INFO'}, "Import completed")
         return {'FINISHED'}
 
