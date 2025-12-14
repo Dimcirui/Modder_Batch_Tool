@@ -4,7 +4,7 @@ schema_version = "1.0.0"
 # Change the values according to your extension
 # id must be the same as the directory name, and must be unique
 id = "Modder_Batch_Tool"
-version = "0.0.1"
+version = "1.4.1"
 name = "Basic Add-on Sample"
 tagline = "This is another extension"
 maintainer = "Developer name <email@address.com>"
