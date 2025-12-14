@@ -183,26 +183,50 @@ def get_meshes_objects(armature_name=None, mode=0, check=True, visible_only=Fals
     return meshes
 
 
-def get_armature(armature_name=None):
-    if not armature_name:
-        armature_name = bpy.context.scene.armature
+def get_armature():
+    """
+    尝试获取当前上下文中的骨架对象。
+    优先顺序：
+    1. 场景中名为 'Armature' 的对象
+    2. 用户在面板上指定的 MHWilds 骨架 (如果有定义)
+    3. 当前选中的骨架对象
+    4. 场景中第一个找到的骨架对象
+    """
+    # 1. 尝试直接获取名为 "Armature" 的对象 (最常见的情况)
+    if "Armature" in bpy.data.objects and bpy.data.objects["Armature"].type == "ARMATURE":
+        return bpy.data.objects["Armature"]
+    
+    # 2. 尝试获取用户在 MBT 面板中设置的 MHWilds 骨架
+    try:
+        # 注意：这里假设你的属性组名称是 mbt_toolpanel，属性名是 Current_MHWilds_Armature
+        # 根据你的 AddonPanels.py 推断的
+        panel_armature = bpy.context.scene.mbt_toolpanel.Current_MHWilds_Armature
+        if panel_armature:
+            # prop_search 存储的是名字还是对象取决于定义，通常是 PointerProperty 则为对象
+            # 如果是 StringProperty 则为名字
+            if isinstance(panel_armature, bpy.types.Object) and panel_armature.type == "ARMATURE":
+                return panel_armature
+            elif isinstance(panel_armature, str) and panel_armature in bpy.data.objects:
+                 if bpy.data.objects[panel_armature].type == "ARMATURE":
+                    return bpy.data.objects[panel_armature]
+    except AttributeError:
+        pass
 
-    # Get all objects in the scene
-    objects = get_objects()
-    if not objects:
-        return None
+    # 3. 尝试获取当前激活/选中的骨架
+    active_obj = bpy.context.active_object
+    if active_obj and active_obj.type == "ARMATURE":
+        return active_obj
+    
+    for obj in bpy.context.selected_objects:
+        if obj.type == "ARMATURE":
+            return obj
 
-    # First try to find exact name match
-    for obj in objects:
-        if obj and obj.type == 'ARMATURE':
-            if obj.name == armature_name:
-                return obj
+    # 4. 最后的手段：返回场景中找到的第一个骨架
+    for obj in bpy.context.scene.objects:
+        if obj.type == "ARMATURE":
+            return obj
 
-    # If no exact match, return first armature if name is empty
-    # if is_enum_empty(armature_name):
-    #     for obj in objects:
-    #         if obj and obj.type == 'ARMATURE':
-    #             return obj
-
+    # 如果实在找不到，返回 None 并打印警告
+    print("[MBT Warning] No armature found in scene!")
     return None
 

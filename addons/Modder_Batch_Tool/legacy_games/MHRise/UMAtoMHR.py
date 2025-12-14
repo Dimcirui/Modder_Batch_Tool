@@ -74,14 +74,14 @@ _NAME_MAP = {
     # 特殊骨骼
     "Sp_Ch_Bust0_L_01": "L_Oupai_00",
     "Sp_Ch_Bust0_R_01": "R_Oupai_00",
-    "MHBone070": "L_Arm_00_W",
-    "MHBone071": "L_Arm_01_W",
-    "MHBone072": "R_Arm_00_W",
-    "MHBone073": "R_Arm_01_W",
-    "MHBone074": "L_Leg_00_W",
-    "MHBone075": "L_Leg_01_W",
-    "MHBone076": "R_Leg_00_W",
-    "MHBone077": "R_Leg_01_W",
+    "MhBone070": "L_Arm_00_W",
+    "MhBone071": "L_Arm_01_W",
+    "MhBone072": "R_Arm_00_W",
+    "MhBone073": "R_Arm_01_W",
+    "MhBone074": "L_Leg_00_W",
+    "MhBone075": "L_Leg_01_W",
+    "MhBone076": "R_Leg_00_W",
+    "MhBone077": "R_Leg_01_W",
 }
 
 

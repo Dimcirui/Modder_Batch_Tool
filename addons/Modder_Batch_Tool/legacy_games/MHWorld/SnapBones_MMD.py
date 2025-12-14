@@ -1,178 +1,178 @@
 import bpy
 import copy
 
-# MMD 日文骨骼 -> MHWorld MHBone 映射 (用于骨骼吸附)
+# MMD 日文骨骼 -> MHWorld MhBone 映射 (用于骨骼吸附)
 _SNAP_MAP_UNFIXED = [
     # 躯干
-    ("下半身", "MHBone_013"),
-    ("上半身", "MHBone_001"),
-    ("上半身2", "MHBone_002"),
-    ("首", "MHBone_003"),
-    ("頭", "MHBone_004"),
-    ("首", "MHBone_254"),
+    ("下半身", "MhBone_013"),
+    ("上半身", "MhBone_001"),
+    ("上半身2", "MhBone_002"),
+    ("首", "MhBone_003"),
+    ("頭", "MhBone_004"),
+    ("首", "MhBone_254"),
     
     # 左臂
-    ("肩.L", "MHBone_005"),
-    ("腕.L", "MHBone_006"),
-    ("ひじ.L", "MHBone_007"),
-    ("手首.L", "MHBone_008"),
-    ("手首.L", "MHBone_030"),
-    ("親指０.L", "MHBone_031"),
-    ("親指１.L", "MHBone_032"),
-    ("親指２.L", "MHBone_033"),
-    ("人指１.L", "MHBone_034"),
-    ("人指２.L", "MHBone_035"),
-    ("人指３.L", "MHBone_036"),
-    ("中指１.L", "MHBone_037"),
-    ("中指２.L", "MHBone_038"),
-    ("中指３.L", "MHBone_039"),
-    ("手首.L", "MHBone_040"),
-    ("薬指１.L", "MHBone_041"),
-    ("薬指２.L", "MHBone_042"),
-    ("薬指３.L", "MHBone_043"),
-    ("小指１.L", "MHBone_044"),
-    ("小指２.L", "MHBone_045"),
-    ("小指３.L", "MHBone_046"),
+    ("肩.L", "MhBone_005"),
+    ("腕.L", "MhBone_006"),
+    ("ひじ.L", "MhBone_007"),
+    ("手首.L", "MhBone_008"),
+    ("手首.L", "MhBone_030"),
+    ("親指０.L", "MhBone_031"),
+    ("親指１.L", "MhBone_032"),
+    ("親指２.L", "MhBone_033"),
+    ("人指１.L", "MhBone_034"),
+    ("人指２.L", "MhBone_035"),
+    ("人指３.L", "MhBone_036"),
+    ("中指１.L", "MhBone_037"),
+    ("中指２.L", "MhBone_038"),
+    ("中指３.L", "MhBone_039"),
+    ("手首.L", "MhBone_040"),
+    ("薬指１.L", "MhBone_041"),
+    ("薬指２.L", "MhBone_042"),
+    ("薬指３.L", "MhBone_043"),
+    ("小指１.L", "MhBone_044"),
+    ("小指２.L", "MhBone_045"),
+    ("小指３.L", "MhBone_046"),
     
     # 右臂
-    ("肩.R", "MHBone_009"),
-    ("腕.R", "MHBone_010"),
-    ("ひじ.R", "MHBone_011"),
-    ("手首.R", "MHBone_012"),
-    ("手首.R", "MHBone_047"),
-    ("親指０.R", "MHBone_048"),
-    ("親指１.R", "MHBone_049"),
-    ("親指２.R", "MHBone_050"),
-    ("人指１.R", "MHBone_051"),
-    ("人指２.R", "MHBone_052"),
-    ("人指３.R", "MHBone_053"),
-    ("中指１.R", "MHBone_054"),
-    ("中指２.R", "MHBone_055"),
-    ("中指３.R", "MHBone_056"),
-    ("手首.R", "MHBone_057"),
-    ("薬指１.R", "MHBone_058"),
-    ("薬指２.R", "MHBone_059"),
-    ("薬指３.R", "MHBone_060"),
-    ("小指１.R", "MHBone_061"),
-    ("小指２.R", "MHBone_062"),
-    ("小指３.R", "MHBone_063"),
+    ("肩.R", "MhBone_009"),
+    ("腕.R", "MhBone_010"),
+    ("ひじ.R", "MhBone_011"),
+    ("手首.R", "MhBone_012"),
+    ("手首.R", "MhBone_047"),
+    ("親指０.R", "MhBone_048"),
+    ("親指１.R", "MhBone_049"),
+    ("親指２.R", "MhBone_050"),
+    ("人指１.R", "MhBone_051"),
+    ("人指２.R", "MhBone_052"),
+    ("人指３.R", "MhBone_053"),
+    ("中指１.R", "MhBone_054"),
+    ("中指２.R", "MhBone_055"),
+    ("中指３.R", "MhBone_056"),
+    ("手首.R", "MhBone_057"),
+    ("薬指１.R", "MhBone_058"),
+    ("薬指２.R", "MhBone_059"),
+    ("薬指３.R", "MhBone_060"),
+    ("小指１.R", "MhBone_061"),
+    ("小指２.R", "MhBone_062"),
+    ("小指３.R", "MhBone_063"),
     
     # 腿部
-    ("足D.L", "MHBone_014"),
-    ("ひざD.L", "MHBone_015"),
-    ("足首D.L", "MHBone_016"),
-    ("足先EX.L", "MHBone_017"),
-    ("足D.R", "MHBone_018"),
-    ("ひざD.R", "MHBone_019"),
-    ("足首D.R", "MHBone_020"),
-    ("足先EX.R", "MHBone_021"),
+    ("足D.L", "MhBone_014"),
+    ("ひざD.L", "MhBone_015"),
+    ("足首D.L", "MhBone_016"),
+    ("足先EX.L", "MhBone_017"),
+    ("足D.R", "MhBone_018"),
+    ("ひざD.R", "MhBone_019"),
+    ("足首D.R", "MhBone_020"),
+    ("足先EX.R", "MhBone_021"),
     
     # 辅助骨骼
-    ("腕.L", "MHBone_070"),
-    ("ひじ.L", "MHBone_071"),
-    ("腕.L", "MHBone_080"),
-    ("手捩.L", "MHBone_081"),
-    ("腕.R", "MHBone_072"),
-    ("ひじ.R", "MHBone_073"),
-    ("腕.R", "MHBone_082"),
-    ("手捩.R", "MHBone_083"),
-    ("足D.L", "MHBone_074"),
-    ("ひざD.L", "MHBone_075"),
-    ("足首D.L", "MHBone_084"),
-    ("足D.R", "MHBone_076"),
-    ("ひざD.R", "MHBone_077"),
-    ("足首D.R", "MHBone_085"),
+    ("腕.L", "MhBone_070"),
+    ("ひじ.L", "MhBone_071"),
+    ("腕.L", "MhBone_080"),
+    ("手捩.L", "MhBone_081"),
+    ("腕.R", "MhBone_072"),
+    ("ひじ.R", "MhBone_073"),
+    ("腕.R", "MhBone_082"),
+    ("手捩.R", "MhBone_083"),
+    ("足D.L", "MhBone_074"),
+    ("ひざD.L", "MhBone_075"),
+    ("足首D.L", "MhBone_084"),
+    ("足D.R", "MhBone_076"),
+    ("ひざD.R", "MhBone_077"),
+    ("足首D.R", "MhBone_085"),
 ]
 
 # MMD 英文骨骼映射
 _SNAP_MAP_FIXED = [
     # 躯干
-    ("Hips", "MHBone_013"),
-    ("Spine", "MHBone_001"),
-    ("Chest", "MHBone_002"),
-    ("Neck", "MHBone_003"),
-    ("Head", "MHBone_004"),
-    ("Neck", "MHBone_254"),
+    ("Hips", "MhBone_013"),
+    ("Spine", "MhBone_001"),
+    ("Chest", "MhBone_002"),
+    ("Neck", "MhBone_003"),
+    ("Head", "MhBone_004"),
+    ("Neck", "MhBone_254"),
     
     # 左臂
-    ("Left shoulder", "MHBone_005"),
-    ("Left arm", "MHBone_006"),
-    ("Left elbow", "MHBone_007"),
-    ("Left wrist", "MHBone_008"),
-    ("Left wrist", "MHBone_030"),
-    ("Thumb0_L", "MHBone_031"),
-    ("Thumb1_L", "MHBone_032"),
-    ("Thumb2_L", "MHBone_033"),
-    ("IndexFinger1_L", "MHBone_034"),
-    ("IndexFinger2_L", "MHBone_035"),
-    ("IndexFinger3_L", "MHBone_036"),
-    ("MiddleFinger1_L", "MHBone_037"),
-    ("MiddleFinger2_L", "MHBone_038"),
-    ("MiddleFinger3_L", "MHBone_039"),
-    ("Left wrist", "MHBone_040"),
-    ("RingFinger1_L", "MHBone_041"),
-    ("RingFinger2_L", "MHBone_042"),
-    ("RingFinger3_L", "MHBone_043"),
-    ("LittleFinger1_L", "MHBone_044"),
-    ("LittleFinger2_L", "MHBone_045"),
-    ("LittleFinger3_L", "MHBone_046"),
+    ("Left shoulder", "MhBone_005"),
+    ("Left arm", "MhBone_006"),
+    ("Left elbow", "MhBone_007"),
+    ("Left wrist", "MhBone_008"),
+    ("Left wrist", "MhBone_030"),
+    ("Thumb0_L", "MhBone_031"),
+    ("Thumb1_L", "MhBone_032"),
+    ("Thumb2_L", "MhBone_033"),
+    ("IndexFinger1_L", "MhBone_034"),
+    ("IndexFinger2_L", "MhBone_035"),
+    ("IndexFinger3_L", "MhBone_036"),
+    ("MiddleFinger1_L", "MhBone_037"),
+    ("MiddleFinger2_L", "MhBone_038"),
+    ("MiddleFinger3_L", "MhBone_039"),
+    ("Left wrist", "MhBone_040"),
+    ("RingFinger1_L", "MhBone_041"),
+    ("RingFinger2_L", "MhBone_042"),
+    ("RingFinger3_L", "MhBone_043"),
+    ("LittleFinger1_L", "MhBone_044"),
+    ("LittleFinger2_L", "MhBone_045"),
+    ("LittleFinger3_L", "MhBone_046"),
     
     # 右臂
-    ("Right shoulder", "MHBone_009"),
-    ("Right arm", "MHBone_010"),
-    ("Right elbow", "MHBone_011"),
-    ("Right wrist", "MHBone_012"),
-    ("Right wrist", "MHBone_047"),
-    ("Thumb0_R", "MHBone_048"),
-    ("Thumb1_R", "MHBone_049"),
-    ("Thumb2_R", "MHBone_050"),
-    ("IndexFinger1_R", "MHBone_051"),
-    ("IndexFinger2_R", "MHBone_052"),
-    ("IndexFinger3_R", "MHBone_053"),
-    ("MiddleFinger1_R", "MHBone_054"),
-    ("MiddleFinger2_R", "MHBone_055"),
-    ("MiddleFinger3_R", "MHBone_056"),
-    ("Right wrist", "MHBone_057"),
-    ("RingFinger1_R", "MHBone_058"),
-    ("RingFinger2_R", "MHBone_059"),
-    ("RingFinger3_R", "MHBone_060"),
-    ("LittleFinger1_R", "MHBone_061"),
-    ("LittleFinger2_R", "MHBone_062"),
-    ("LittleFinger3_R", "MHBone_063"),
+    ("Right shoulder", "MhBone_009"),
+    ("Right arm", "MhBone_010"),
+    ("Right elbow", "MhBone_011"),
+    ("Right wrist", "MhBone_012"),
+    ("Right wrist", "MhBone_047"),
+    ("Thumb0_R", "MhBone_048"),
+    ("Thumb1_R", "MhBone_049"),
+    ("Thumb2_R", "MhBone_050"),
+    ("IndexFinger1_R", "MhBone_051"),
+    ("IndexFinger2_R", "MhBone_052"),
+    ("IndexFinger3_R", "MhBone_053"),
+    ("MiddleFinger1_R", "MhBone_054"),
+    ("MiddleFinger2_R", "MhBone_055"),
+    ("MiddleFinger3_R", "MhBone_056"),
+    ("Right wrist", "MhBone_057"),
+    ("RingFinger1_R", "MhBone_058"),
+    ("RingFinger2_R", "MhBone_059"),
+    ("RingFinger3_R", "MhBone_060"),
+    ("LittleFinger1_R", "MhBone_061"),
+    ("LittleFinger2_R", "MhBone_062"),
+    ("LittleFinger3_R", "MhBone_063"),
     
     # 腿部
-    ("Left leg", "MHBone_014"),
-    ("Left knee", "MHBone_015"),
-    ("Left ankle", "MHBone_016"),
-    ("Left toe", "MHBone_017"),
-    ("Right leg", "MHBone_018"),
-    ("Right knee", "MHBone_019"),
-    ("Right ankle", "MHBone_020"),
-    ("Right toe", "MHBone_021"),
+    ("Left leg", "MhBone_014"),
+    ("Left knee", "MhBone_015"),
+    ("Left ankle", "MhBone_016"),
+    ("Left toe", "MhBone_017"),
+    ("Right leg", "MhBone_018"),
+    ("Right knee", "MhBone_019"),
+    ("Right ankle", "MhBone_020"),
+    ("Right toe", "MhBone_021"),
     
     # 辅助骨骼
-    ("Left arm", "MHBone_070"),
-    ("Left elbow", "MHBone_071"),
-    ("Left arm", "MHBone_080"),
-    ("zHandTwist_L", "MHBone_081"),
-    ("Right arm", "MHBone_072"),
-    ("Right elbow", "MHBone_073"),
-    ("Right arm", "MHBone_082"),
-    ("zHandTwist_R", "MHBone_083"),
-    ("Left leg", "MHBone_074"),
-    ("Left knee", "MHBone_075"),
-    ("Left ankle", "MHBone_084"),
-    ("Right leg", "MHBone_076"),
-    ("Right knee", "MHBone_077"),
-    ("Right ankle", "MHBone_085"),
+    ("Left arm", "MhBone_070"),
+    ("Left elbow", "MhBone_071"),
+    ("Left arm", "MhBone_080"),
+    ("zHandTwist_L", "MhBone_081"),
+    ("Right arm", "MhBone_072"),
+    ("Right elbow", "MhBone_073"),
+    ("Right arm", "MhBone_082"),
+    ("zHandTwist_R", "MhBone_083"),
+    ("Left leg", "MhBone_074"),
+    ("Left knee", "MhBone_075"),
+    ("Left ankle", "MhBone_084"),
+    ("Right leg", "MhBone_076"),
+    ("Right knee", "MhBone_077"),
+    ("Right ankle", "MhBone_085"),
 ]
 
 # 需要特殊处理的肘部辅助骨骼
 _ELBOW_AUX_BONES = [
-    "MHBone_101",
-    "MHBone_102", 
-    "MHBone_103",
-    "MHBone_104",
+    "MhBone_101",
+    "MhBone_102", 
+    "MhBone_103",
+    "MhBone_104",
 ]
 
 
@@ -205,12 +205,12 @@ def _snap_bones(context):
         if dst_name not in edit_bones:
             continue
             
-        # 特殊处理：记录 MHBone_007 吸附前的位置
+        # 特殊处理：记录 MhBone_007 吸附前的位置
         before_head = None
         before_tail = None
-        if dst_name == "MHBone_007":
-            before_head = copy.deepcopy(edit_bones["MHBone_007"].head)
-            before_tail = copy.deepcopy(edit_bones["MHBone_007"].tail)
+        if dst_name == "MhBone_007":
+            before_head = copy.deepcopy(edit_bones["MhBone_007"].head)
+            before_tail = copy.deepcopy(edit_bones["MhBone_007"].tail)
         
         # 执行吸附
         edit_bones.active = edit_bones[src_name]
@@ -226,15 +226,15 @@ def _snap_bones(context):
         context.area.type = original_area
         
         # 特殊处理：脚趾骨骼 Y 轴位置修正
-        if dst_name in ("MHBone_017", "MHBone_021"):
+        if dst_name in ("MhBone_017", "MhBone_021"):
             edit_bones.active = edit_bones[dst_name]
             context.active_bone.head[1] = -104.611
             context.active_bone.tail[1] = -104.607
         
         # 特殊处理：肘部吸附后移动辅助骨骼
-        if dst_name == "MHBone_007" and before_head is not None:
-            after_head = edit_bones["MHBone_007"].head
-            after_tail = edit_bones["MHBone_007"].tail
+        if dst_name == "MhBone_007" and before_head is not None:
+            after_head = edit_bones["MhBone_007"].head
+            after_tail = edit_bones["MhBone_007"].tail
             head_offset = after_head - before_head
             tail_offset = after_tail - before_tail
             
@@ -245,13 +245,11 @@ def _snap_bones(context):
         
         bpy.ops.armature.select_all(action='DESELECT')
     
-    # 显示所有骨骼层 (Blender 4.x 用 collections)
+    # 显示所有骨骼层
     if hasattr(context.object.data, 'layers'):
-        # Blender 3.x 及以下
         for i in range(32):
             context.object.data.layers[i] = True
     else:
-        # Blender 4.x 使用 bone collections
         for coll in armature.collections:
             coll.is_visible = True
     
