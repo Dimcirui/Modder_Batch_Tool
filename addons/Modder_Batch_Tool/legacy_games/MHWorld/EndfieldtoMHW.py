@@ -15,11 +15,11 @@ _ENDFIELD_MAP_LIST = [
     ("L_Clavicle", "MHBone_005"),
     ("LUpArmTwist", "MHBone_080"),
     ("LUpArmTwist1", "MHBone_080"),
+    ("L_UpperArm_ty_minus", "MHBone_080"),
+    ("L_UpperArm_ty_plus", "MHBone_080"),
+    ("L_UpperArm_tz_minus", "MHBone_080"),
+    ("L_UpperArm_tz_plus", "MHBone_070"),
     ("L_UpperArm", "MHBone_006"),
-    ("L_UpperArm_ty_minus", "MHBone_006"),
-    ("L_UpperArm_ty_plus", "MHBone_006"),
-    ("L_UpperArm_tz_minus", "MHBone_006"),
-    ("L_UpperArm_ty_plus", "MHBone_070"),
     ("L_Forearm", "MHBone_007"),
     ("L_ForeTwist", "MHBone_081"),
     ("L_ForeTwist1", "MHBone_081"),
@@ -46,11 +46,11 @@ _ENDFIELD_MAP_LIST = [
     ("R_Clavicle", "MHBone_009"),
     ("RUpArmTwist", "MHBone_082"),
     ("RUpArmTwist1", "MHBone_082"),
+    ("R_UpperArm_ty_minus", "MHBone_082"),
+    ("R_UpperArm_ty_plus", "MHBone_082"),
+    ("R_UpperArm_tz_minus", "MHBone_082"),
+    ("R_UpperArm_tz_plus", "MHBone_072"),
     ("R_UpperArm", "MHBone_010"),
-    ("R_UpperArm_ty_minus", "MHBone_010"),
-    ("R_UpperArm_ty_plus", "MHBone_010"),
-    ("R_UpperArm_tz_minus", "MHBone_010"),
-    ("R_UpperArm_ty_plus", "MHBone_072"),
     ("R_Forearm", "MHBone_011"),
     ("R_ForeTwist", "MHBone_083"),
     ("R_ForeTwist1", "MHBone_083"),
@@ -232,38 +232,36 @@ def _process_endfield_bones(obj):
     2. 如果目标组已存在: 将源组权重合并(Add)到目标组，然后删除源组。
     """
     vgroups = obj.vertex_groups
+    processed = set()  # 记录已处理的目标名称
     
     for src_name, dst_name in _ENDFIELD_MAP_LIST:
         # 如果源顶点组不存在，跳过
         if src_name not in vgroups:
             continue
-            
-        src_vg = vgroups[src_name]
         
-        # 检查目标顶点组是否已经存在
-        if dst_name in vgroups:
-            # 目标组已存在，执行权重合并 (Merge)
-            # 使用 VertexWeightMix 修改器进行非破坏性合并，然后应用
-            mod = obj.modifiers.new(name="Temp_Bone_Merge", type='VERTEX_WEIGHT_MIX')
-            mod.vertex_group_a = dst_name
-            mod.vertex_group_b = src_name
-            mod.mix_mode = 'ADD'
-            mod.mix_set = 'ALL'
+        # 如果这个目标名称已经被处理过（说明是重复映射）
+        if dst_name in processed and dst_name in vgroups:
+            # 合并权重
+            src_vg = vgroups[src_name]
+            dst_vg = vgroups[dst_name]
             
-            # 强制应用修改器
-            try:
-                bpy.ops.object.modifier_apply(modifier=mod.name)
-            except RuntimeError:
-                # 某些情况下（如物体未激活）可能失败，确保物体是激活的
-                pass
+            for vert in obj.data.vertices:
+                try:
+                    src_weight = src_vg.weight(vert.index)
+                    try:
+                        dst_weight = dst_vg.weight(vert.index)
+                        dst_vg.add([vert.index], src_weight + dst_weight, 'REPLACE')
+                    except RuntimeError:
+                        dst_vg.add([vert.index], src_weight, 'REPLACE')
+                except RuntimeError:
+                    pass
             
-            # 合并完成后，移除源顶点组
+            # 删除源组
             vgroups.remove(src_vg)
-            
         else:
-            # 目标组不存在，直接重命名 (Rename)
-            src_vg.name = dst_name
-
+            # 第一次遇到这个目标名称，直接重命名
+            vgroups[src_name].name = dst_name
+            processed.add(dst_name)
 class MHW_OT_EndfieldToMHW(bpy.types.Operator):
     """Convert Endfield vertex groups to MHWorld format (Merge weights for duplicates)"""
     bl_idname = "mhw.endfield_to_mhw"
