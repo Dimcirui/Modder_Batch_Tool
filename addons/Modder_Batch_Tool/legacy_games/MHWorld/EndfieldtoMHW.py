@@ -140,7 +140,7 @@ _ENDFIELD_MAP_LIST = [
     ## 眼睛
     ("faceLfIrisJoint", "MHBone_315"),
     ("faceLfHighlightJoint", "MHBone_315"),
-    ("faceLfHighLightJointA", "MHBone_315"),
+    ("faceLfHighlightJointA", "MHBone_315"),
     ("faceLfHighlightJointB", "MHBone_315"),
     ("faceLfPupilJoint", "MHBone_315"),
     ("eyeLf01Joint", "MHBone_319"),
@@ -160,7 +160,7 @@ _ENDFIELD_MAP_LIST = [
     
     ("faceRtIrisJoint", "MHBone_328"),
     ("faceRtHighlightJoint", "MHBone_328"),
-    ("faceRtHighLightJointA", "MHBone_328"),
+    ("faceRtHighlightJointA", "MHBone_328"),
     ("faceRtHighlightJointB", "MHBone_328"),
     ("faceRtPupilJoint", "MHBone_328"),
     ("eyeRt01Joint", "MHBone_332"),
