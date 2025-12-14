@@ -5,9 +5,9 @@ schema_version = "1.0.0"
 # id must be the same as the directory name, and must be unique
 id = "Modder_Batch_Tool"
 version = "1.4.1"
-name = "Basic Add-on Sample"
+name = "Modder Batch Tool"
 tagline = "This is another extension"
-maintainer = "Developer name <email@address.com>"
+maintainer = "Dimcirui <dimcirui@qq.com>"
 # Supported types: "add-on", "theme"
 type = "add-on"
 
