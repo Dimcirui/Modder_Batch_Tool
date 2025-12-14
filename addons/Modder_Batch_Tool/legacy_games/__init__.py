@@ -18,6 +18,8 @@ _submodule_names = {
         "UMAtoMHW",
         "VRCHATtoMHW",
         "addemptymesh",
+        "SnapBones_Endfield",
+        "EndfieldtoMHW",
         # "auto_process",
     ],
 }

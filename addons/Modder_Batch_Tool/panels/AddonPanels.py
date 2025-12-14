@@ -347,17 +347,19 @@ class MBTMHWorld(bpy.types.Panel):
         layout.label(text="Batch Snap Bones")
         row = layout.row()
         row.operator("mhw.snap_bones_mmd", icon="OUTLINER_OB_ARMATURE")
-        row.operator("mhw.snap_bones_endfield", icon="OUTLINER_OB_ARMATURE")
+        row.operator("mhw.snap_bones_endfield", text="Snap Endfield Bones", icon="OUTLINER_OB_ARMATURE")
 
         layout.label(text="Rename Vertex Groups")
         row = layout.row()
         row.operator("mhw.mmd_to_mhw", icon="OUTLINER_DATA_MESH")
+        row = layout.row()
         row.operator("mhw.vrchat_to_mhw", icon="OUTLINER_DATA_MESH")
+        row = layout.row()
         row.operator("mhw.uma_to_mhw", icon="OUTLINER_DATA_MESH")
-        row.operator("mhw.endfield_to_mhw", icon="OUTLINER_DATA_MESH")
-        
         row = layout.row()
         row.operator("mhw.mhr_to_mhw", icon="OUTLINER_DATA_MESH")
+        row = layout.row()
+        row.operator("mhw.endfield_to_mhw", text="Endfield to MHW", icon="OUTLINER_DATA_MESH")
         
         layout.label(text="Utility")
         row = layout.row()
