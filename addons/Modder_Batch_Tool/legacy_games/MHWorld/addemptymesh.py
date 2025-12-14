@@ -1,8 +1,9 @@
+import os
 import bpy
 import pathlib
 
 _mesh_dir = pathlib.Path(__file__).parent / "mesh"
-_empty_mesh_file = str(_mesh_dir / "emptymesh.mod3")
+# _empty_mesh_file = str(_mesh_dir / "emptymesh.mod3")
 
 
 class MHW_OT_AddEmptyMesh(bpy.types.Operator):
@@ -23,7 +24,7 @@ class MHW_OT_AddEmptyMesh(bpy.types.Operator):
         
         for arm_name in armature_names:
             # 导入空网格
-            bpy.ops.custom_import.import_mhw_mod3(filepath=_empty_mesh_file)
+            bpy.ops.mhw_mod3.import_mhw_mod3('EXEC_DEFAULT', directory=str(_mesh_dir) + os.sep, files=[{"name": "emptymesh.mod3"}],)
             
             # 获取导入的对象
             mesh_names = sorted(
