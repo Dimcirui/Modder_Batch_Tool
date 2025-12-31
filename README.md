@@ -19,7 +19,7 @@ Considering creating an instruction document. Most of the functions have been ma
 * The material-combiner function is used the same as before, **but it does not merge materials, only images**. This means that you can still separate by materials after it.
 
 # Author
-* **Korone** - For the writing of most functions.
+* **Korone** - For the writing of most functions and the framework for the entire tool
 * **Dimcirui** - Add support for MHWI and MHRS.
 
 # Acknowledgements
