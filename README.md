@@ -6,7 +6,8 @@
 Considering creating an instruction document. Most of the functions have been marked on the addon panel.
 
 # Requirements
-* [Blender 4.2 or higher](https://www.blender.org/download/)
+* [Blender 4.x (4.2+)](https://www.blender.org/download/)
+* other versions are still pending testing.
 
 # Installation
 1. Download this addon;
