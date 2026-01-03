@@ -7,7 +7,7 @@ Considering creating an instruction document. Most of the functions have been ma
 
 # Requirements
 * [Blender 4.x (4.2+)](https://www.blender.org/download/)
-* other versions are still pending testing.
+* Blender 3.x are still pending testing.
 
 # Installation
 1. Download this addon;
