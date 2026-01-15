@@ -362,9 +362,9 @@ class MBTMHWorld(bpy.types.Panel):
         row = layout.row()
         row.operator("mhw.endfield_to_mhw", text="Endfield to MHW", icon="OUTLINER_DATA_MESH")
         
-        layout.label(text="Utility")
-        row = layout.row()
-        row.operator("mhw.add_empty_mesh", icon="MESH_CUBE")
+        # layout.label(text="Utility")
+        # row = layout.row()
+        # row.operator("mhw.add_empty_mesh", icon="MESH_CUBE")
         
         layout.label(text="Auto Process (Check Settings First)")
         row = layout.row()

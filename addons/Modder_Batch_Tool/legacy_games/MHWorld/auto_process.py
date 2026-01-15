@@ -34,9 +34,6 @@ class MHW_OT_AutoExportProcess(bpy.types.Operator):
             
         if scene.mhw_use_cleanzerovg:
             bpy.ops.tool.cleanzerovg()
-            
-        if scene.mhw_use_limitvg:
-            bpy.ops.tool.normalizelimitvg()
 
         self.report({'INFO'}, "Process completed")
         return {'FINISHED'}
@@ -63,7 +60,6 @@ class MHW_OT_ProcessSettings(bpy.types.Operator):
         col.prop(scene, "mhw_use_unifyuvs")
         col.prop(scene, "mhw_use_separatebymaterials")
         col.prop(scene, "mhw_use_cleanzerovg")
-        col.prop(scene, "mhw_use_limitvg")
 
 
 # === 类列表 ===
@@ -73,7 +69,7 @@ classes = [
 ]
 
 
-# === 属性注册 (加前缀避免冲突) ===
+# === 属性注册 ===
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
@@ -98,10 +94,6 @@ def register():
         name="Clean Zero Weight VG",
         default=True
     )
-    Scene.mhw_use_limitvg = BoolProperty(
-        name="Convert 8wt to 4wt",
-        default=True
-    )
 
 
 def unregister():
@@ -113,4 +105,3 @@ def unregister():
     del Scene.mhw_use_unifyuvs
     del Scene.mhw_use_separatebymaterials
     del Scene.mhw_use_cleanzerovg
-    del Scene.mhw_use_limitvg

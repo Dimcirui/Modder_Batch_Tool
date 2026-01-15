@@ -17,7 +17,7 @@ _submodule_names = {
         "SnapBones_MMD",
         "UMAtoMHW",
         "VRCHATtoMHW",
-        "addemptymesh",
+        # "addemptymesh",
         "SnapBones_Endfield",
         "EndfieldtoMHW",
         # "auto_process",
