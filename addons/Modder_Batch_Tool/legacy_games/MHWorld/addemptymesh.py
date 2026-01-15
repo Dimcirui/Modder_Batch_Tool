@@ -1,77 +1,83 @@
-import os
 import bpy
-import pathlib
-
-_mesh_dir = pathlib.Path(__file__).parent / "mesh"
-# _empty_mesh_file = str(_mesh_dir / "emptymesh.mod3")
-
+import os
 
 class MHW_OT_AddEmptyMesh(bpy.types.Operator):
-    """Add empty meshes to selected armatures"""
+    """Import an empty mod3 mesh for merging purposes"""
     bl_idname = "mhw.add_empty_mesh"
-    bl_label = "Add Empty Meshes"
+    bl_label = "Add Empty Mesh"
     bl_options = {'REGISTER', 'UNDO'}
 
-    @classmethod
-    def poll(cls, context):
-        return any(obj.type == "ARMATURE" for obj in context.selected_objects)
-
     def execute(self, context):
-        bpy.ops.object.mode_set(mode='OBJECT')
-        armature_names = sorted(
-            obj.name for obj in context.selected_objects if obj.type == "ARMATURE"
-        )
+        # 1. 获取自带的 emptymesh.mod3 文件路径
+        # 假设该文件位于当前脚本同级目录下的 mesh 文件夹内
+        addon_dir = os.path.dirname(os.path.abspath(__file__))
+        mesh_path = os.path.join(addon_dir, "mesh", "emptymesh.mod3")
         
-        for arm_name in armature_names:
-            # 导入空网格
-            bpy.ops.mhw_mod3.import_mhw_mod3('EXEC_DEFAULT', directory=str(_mesh_dir) + os.sep, files=[{"name": "emptymesh.mod3"}],)
-            
-            # 获取导入的对象
-            mesh_names = sorted(
-                obj.name for obj in context.selected_objects if obj.type == "MESH"
-            )
-            armature_import_names = sorted(
-                obj.name for obj in context.selected_objects if obj.type == "ARMATURE"
-            )
-            
-            # 设置父级
-            context.view_layer.objects.active = bpy.data.objects[arm_name]
-            bpy.ops.object.parent_set(type='OBJECT', keep_transform=True)
-            
-            # 处理空网格
-            context.view_layer.objects.active = bpy.data.objects[mesh_names[0]]
-            empty_obj = context.active_object
-            empty_obj.data["blockLabel"] = ""
-            context.view_layer.update()
-            
-            # 移除 modifier 并重新绑定
-            bpy.ops.object.modifier_remove()
-            modifier = empty_obj.modifiers[0]
-            modifier.object = bpy.data.objects[arm_name]
-            
-            # 清空顶点
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.mesh.select_all(action='SELECT')
-            bpy.ops.mesh.delete(type='VERT')
-            bpy.ops.object.mode_set(mode='OBJECT')
-            
-            # 移除顶点组
-            empty_obj.vertex_groups.remove(empty_obj.vertex_groups[0])
-            
-            # 删除导入的骨架
+        if not os.path.exists(mesh_path):
+            self.report({'ERROR'}, f"Empty mesh file not found at: {mesh_path}")
+            return {'CANCELLED'}
+
+        # 2. 记录当前场景的所有物体 (快照)
+        # 这样我们就不用依赖 unreliable 的 selected_objects 了
+        old_objects = set(context.scene.objects)
+
+        # 3. 执行导入
+        # MHW Mod3 Importer 的标准操作符通常是 import_mesh.mhw_mod3
+        try:
+            bpy.ops.import_mesh.mhw_mod3(filepath=mesh_path)
+        except AttributeError:
+            # 如果用户没装 Mod3 Importer 或者是其他版本的插件
+            self.report({'ERROR'}, "Could not find 'import_mesh.mhw_mod3'. Please ensure the MHW Mod3 Importer addon is installed.")
+            return {'CANCELLED'}
+        except Exception as e:
+            self.report({'ERROR'}, f"Import failed: {str(e)}")
+            return {'CANCELLED'}
+
+        # 4. 找出新增加的物体
+        current_objects = set(context.scene.objects)
+        new_objects = current_objects - old_objects
+        
+        if not new_objects:
+            self.report({'WARNING'}, "Import operator ran but no new objects appeared in the scene.")
+            return {'CANCELLED'}
+
+        # 5. 分类新物体 (找出网格和骨架)
+        target_mesh = None
+        target_armature = None
+        
+        for obj in new_objects:
+            if obj.type == 'MESH':
+                target_mesh = obj
+            elif obj.type == 'ARMATURE':
+                target_armature = obj
+        
+        # 6. 设置活动物体
+        if target_mesh:
+            # 清除所有选择
             bpy.ops.object.select_all(action='DESELECT')
-            bpy.data.objects[armature_import_names[0]].select_set(True)
-            bpy.ops.object.delete(use_global=False)
-
-        # 恢复选择
-        context.view_layer.objects.active = bpy.data.objects[armature_names[0]]
-        for name in armature_names:
-            bpy.data.objects[name].select_set(True)
             
-        self.report({'INFO'}, "Add completed")
-        return {'FINISHED'}
+            # 选中并激活新网格
+            target_mesh.select_set(True)
+            context.view_layer.objects.active = target_mesh
+            
+            # 如果导入还附带了骨架，也顺便选中它(方便用户操作)，但保持网格为活动物体
+            if target_armature:
+                target_armature.select_set(True)
+                
+            self.report({'INFO'}, f"Added empty mesh: {target_mesh.name}")
+        else:
+            self.report({'WARNING'}, "Imported successfully but could not identify the mesh object.")
 
+        return {'FINISHED'}
 
 classes = [
     MHW_OT_AddEmptyMesh,
 ]
+
+def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+def unregister():
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
