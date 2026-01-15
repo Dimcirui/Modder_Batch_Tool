@@ -6,7 +6,8 @@
 Considering creating an instruction document. Most of the functions have been marked on the addon panel.
 
 # Requirements
-* [Blender 4.2 or higher](https://www.blender.org/download/)
+* [Blender 4.x (4.2+)](https://www.blender.org/download/)
+* Blender 3.x are still pending testing.
 
 # Installation
 1. Download this addon;
@@ -19,7 +20,7 @@ Considering creating an instruction document. Most of the functions have been ma
 * The material-combiner function is used the same as before, **but it does not merge materials, only images**. This means that you can still separate by materials after it.
 
 # Author
-* **Korone** - For the writing of most functions.
+* **Korone** - For the writing of most functions and the framework for the entire tool
 * **Dimcirui** - Add support for MHWI and MHRS.
 
 # Acknowledgements
