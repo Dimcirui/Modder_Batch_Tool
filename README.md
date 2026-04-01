@@ -6,8 +6,7 @@
 Considering creating an instruction document. Most of the functions have been marked on the addon panel.
 
 # Requirements
-* [Blender 4.x (4.2+)](https://www.blender.org/download/)
-* Blender 3.x are still pending testing.
+* [Blender 4.2+](https://www.blender.org/download/)
 
 # Installation
 1. Download this addon;
@@ -31,6 +30,6 @@ Considering creating an instruction document. Most of the functions have been ma
 
 # 一些中文内容
 B站id：不太亮的诸葛亮
-怪猎mod作者交流群：640945651
+怪猎mod作者交流群：860186389
 
 

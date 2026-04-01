@@ -22,7 +22,7 @@ class MHW_OT_RenameVG(bpy.types.Operator):
         enum_value = bpy.context.scene.mbt_toolpanel.MHWorldBoneList
         file_name = os.path.splitext(os.path.basename(enum_value))[0]
 
-        preset_module = importlib.import_module(f".bonenamelist.{file_name}", package=__name__)
+        preset_module = importlib.import_module(f"Modder_Batch_Tool.games.MHWorld.bonenamelist.{file_name}")
         importlib.reload(preset_module)
 
         rename_list = preset_module.rename_vg_fixed_name_list
