@@ -1,9 +1,13 @@
 import bpy
-import pathlib
+import os
 
-_mesh_dir = pathlib.Path(__file__).parent / "mesh"
-_f_mesh_file = str(_mesh_dir / "f_shadow_mesh.fbx")
-_m_mesh_file = str(_mesh_dir / "m_shadow_mesh.fbx")
+_mesh_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh")
+_f_mesh_file = "f_shadow.mesh.2109148288"
+_m_mesh_file = "m_shadow.mesh.2109148288"
+
+
+def _check_re_mesh():
+    return hasattr(bpy.ops, 're_mesh') and hasattr(bpy.ops.re_mesh, 'importfile')
 
 
 class MHR_OT_ImportFemaleMesh(bpy.types.Operator):
@@ -12,8 +16,20 @@ class MHR_OT_ImportFemaleMesh(bpy.types.Operator):
     bl_label = "Female Shadow Mesh"
     bl_options = {'REGISTER', 'UNDO'}
 
+    @classmethod
+    def poll(cls, context):
+        return _check_re_mesh()
+
     def execute(self, context):
-        bpy.ops.import_scene.fbx(filepath=_f_mesh_file)
+        bpy.ops.re_mesh.importfile(
+            'EXEC_DEFAULT',
+            directory=_mesh_dir + os.sep,
+            files=[{"name": _f_mesh_file}],
+            clearScene=False,
+            loadMaterials=False,
+            rotate90=True,
+            importAllLODs=False,
+        )
         self.report({'INFO'}, "Import completed")
         return {'FINISHED'}
 
@@ -24,8 +40,20 @@ class MHR_OT_ImportMaleMesh(bpy.types.Operator):
     bl_label = "Male Shadow Mesh"
     bl_options = {'REGISTER', 'UNDO'}
 
+    @classmethod
+    def poll(cls, context):
+        return _check_re_mesh()
+
     def execute(self, context):
-        bpy.ops.import_scene.fbx(filepath=_m_mesh_file)
+        bpy.ops.re_mesh.importfile(
+            'EXEC_DEFAULT',
+            directory=_mesh_dir + os.sep,
+            files=[{"name": _m_mesh_file}],
+            clearScene=False,
+            loadMaterials=False,
+            rotate90=True,
+            importAllLODs=False,
+        )
         self.report({'INFO'}, "Import completed")
         return {'FINISHED'}
 
