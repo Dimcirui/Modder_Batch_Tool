@@ -40,7 +40,7 @@ class MHW_OT_SnapBones(bpy.types.Operator):
         enum_value = bpy.context.scene.mbt_toolpanel.MHWorldBoneList
         file_name = os.path.splitext(os.path.basename(enum_value))[0]
 
-        preset_module = importlib.import_module(f".bonenamelist.{file_name}", package=__name__)
+        preset_module = importlib.import_module(f".bonenamelist.{file_name}", package=__package__)
         importlib.reload(preset_module)
 
         snap_bone_list = preset_module.snap_bone_fixed_name_list

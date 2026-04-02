@@ -36,7 +36,7 @@ class MHWildssnapbone(bpy.types.Operator):
         enumValue = bpy.context.scene.mbt_toolpanel.MHWildsBoneList
         file_name, file_extension = os.path.splitext(os.path.basename(enumValue))
 
-        preset_module = importlib.import_module(f".bonenamelist.{file_name}", package=__name__)
+        preset_module = importlib.import_module(f".bonenamelist.{file_name}", package=__package__)
 
         if "preset_module" in locals():
             importlib.reload(preset_module)
